@@ -1,37 +1,53 @@
+// src/App.tsx
 import { useState } from 'react';
 import SplashScreen from './components/SplashScreen';
-import GameScreen from './components/GameScreen'; // import the GameScreen component
-import EndScreen from './components/EndScreen'; // import the EndScreen component
-
-/*
-    This is the main App component that will manage the game state and render the appropriate
-    GameScreen and EndScreen components. The App component will keep track of the game state and
-    update it based on user interactions such as starting the game, ending the game, or restarting
-    the game.
-    Optionally, we can add more features such as a timer, a score, and a leaderboard to the game.
-*/
+import GameScreen from './components/GameScreen';
+import EndScreen from './components/EndScreen';
+import WinScreen from './components/WinScreen';
+import './styles/App.css'; // Import the CSS file
 
 function App() {
-  const [gameState, setGameState] = useState('splash'); // state to manage the game state
+  const [gameState, setGameState] = useState('splash');
+  const [gameKey, setGameKey] = useState(0);
+  const [timeTaken, setTimeTaken] = useState(0);
+  const [movesTaken, setMovesTaken] = useState(0);
+  const [score, setScore] = useState(0);
+  const [previousScores, setPreviousScores] = useState<number[]>([]);
+  const [gridSize, setGridSize] = useState({ x: 2, y: 2 });
+  const [theme, setTheme] = useState<'dog' | 'cat'>('dog');
 
-  const startGame = () => {
-    setGameState('play'); // set gameState to 'play' when game starts
+  const startGame = (mode: 'easy' | 'normal', selectedTheme: 'dog' | 'cat') => {
+    setTheme(selectedTheme)
+    setGridSize(mode === 'easy' ? { x: 2, y: 2 } : { x: 4, y: 4 });
+    setGameKey(prevKey => prevKey + 1); // Increment key to force re-render
+    setGameState('play');
   };
 
   const endGame = () => {
-    setGameState('end'); // set gameState to 'end' when game ends
+    setGameState('end');
+  };
+
+  const winGame = (time: number, moves: number) => {
+    const newScore = 1000 - (time + moves);
+    setTimeTaken(time);
+    setMovesTaken(moves);
+    setScore(newScore);
+    setPreviousScores([...previousScores, newScore]);
+    setGameState('win');
   };
 
   const restartGame = () => {
-    setGameState('splash'); // set gameState to 'splash' when game restarts
+    setGameKey(prevKey => prevKey + 1); // Increment key to force re-render
+    setGameState('splash');
   };
 
   return (
-    <div className="App">
-      {gameState === 'splash' && <SplashScreen onStartGame={startGame} />}
-      {gameState === 'play' && <GameScreen x={4} y={4} onEndGame={endGame} />}
-      {gameState === 'end' && <EndScreen onRestartGame={restartGame} />}
-    </div>
+      <div className="App">
+        {gameState === 'splash' && <SplashScreen onStartGame={startGame} />}
+        {gameState === 'play' && <GameScreen key={gameKey} x={gridSize.x} y={gridSize.y} onEndGame={endGame} onWinGame={winGame} theme={theme} />}
+        {gameState === 'end' && <EndScreen onRestartGame={restartGame} />}
+        {gameState === 'win' && <WinScreen onRestartGame={restartGame} timeTaken={timeTaken} movesTaken={movesTaken} score={score} previousScores={previousScores.slice(0, -1)} />}
+      </div>
   );
 }
 

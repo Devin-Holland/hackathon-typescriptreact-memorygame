@@ -1,0 +1,16 @@
+/* src/styles/App.css */
+.App {
+    background-color: #4b0082; /* Medium dark purple */
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: auto; /* Ensure the background repeats if the content overflows */
+    background-repeat: repeat; /* Repeat the background */
+}
+
+body {
+    margin: 0; /* Remove margin from the body */
+}
