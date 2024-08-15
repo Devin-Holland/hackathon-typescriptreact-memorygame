@@ -1,5 +1,8 @@
 /* SplashScreen.css */
 
+.screen {
+  color: #fff;
+}
 .splash-screen {
   display: flex;
   flex-direction: column;
@@ -7,6 +10,7 @@
   justify-content: center;
   height: 100vh;
   background-color: #f1f1f1;
+  color: #fff;
 }
 
 .splash-screen h1 {
@@ -18,4 +22,20 @@
 .splash-screen p {
   font-size: 16px;
   color: #555555;
+}
+
+/* src/styles/SplashScreen.css */
+.screen button {
+  margin: 50px; /* Add margin to create space between buttons */
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.screen button:hover {
+  background-color: #0056b3;
 }
